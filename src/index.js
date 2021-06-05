@@ -13,9 +13,10 @@ const searchJson = (json, searchTerm, levelPath) => {
     const path = `${levelPath}.${jsonElement}`;
     if (_.isString(json[jsonElement]) && json[jsonElement].toLowerCase().includes(searchTerm)) {
       paths.push(path);
-    } else if (_.isNumber(json[jsonElement]) && String(json[jsonElement]).includes(searchTerm)) {
-      paths.push(path);
-    } else if (_.isBoolean(json[jsonElement]) && String(json[jsonElement]).includes(searchTerm)) {
+    } else if (
+      (_.isNumber(json[jsonElement]) || _.isBoolean(json[jsonElement])) &&
+      String(json[jsonElement]).includes(searchTerm)
+    ) {
       paths.push(path);
     } else if (_.isObject(json[jsonElement])) {
       const result = searchJson(json[jsonElement], searchTerm, path);
