@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 /**
  * @param {Object} json
  * @param {String} searchTerm
@@ -15,14 +13,14 @@ const searchJson = (json, searchTerm, levelPath) => {
 
   for (const jsonElement in json) {
     const path = `${levelPath}.${jsonElement}`;
-    if (_.isString(json[jsonElement]) && json[jsonElement].toLowerCase().includes(searchTerm)) {
+    if (typeof json[jsonElement] === 'string' && json[jsonElement].toLowerCase().includes(searchTerm)) {
       paths.push(path);
     } else if (
-      (_.isNumber(json[jsonElement]) || _.isBoolean(json[jsonElement])) &&
+      (typeof json[jsonElement] === 'number' || typeof json[jsonElement] === 'boolean') &&
       String(json[jsonElement]).includes(searchTerm)
     ) {
       paths.push(path);
-    } else if (_.isObject(json[jsonElement])) {
+    } else if (typeof json[jsonElement] === 'object') {
       const result = searchJson(json[jsonElement], searchTerm, path);
       if (result.length) {
         paths.push(...result);
