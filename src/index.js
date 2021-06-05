@@ -9,6 +9,10 @@ const _ = require('lodash');
 const searchJson = (json, searchTerm, levelPath) => {
   const paths = [];
 
+  if (!searchTerm) {
+    return paths;
+  }
+
   for (const jsonElement in json) {
     const path = `${levelPath}.${jsonElement}`;
     if (_.isString(json[jsonElement]) && json[jsonElement].toLowerCase().includes(searchTerm)) {

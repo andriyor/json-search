@@ -33,3 +33,7 @@ test('search substring', () => {
     'root.arr.0',
   ]);
 });
+
+test('search substring', () => {
+  expect(searchJson(json, '', 'root')).toStrictEqual([]);
+});
