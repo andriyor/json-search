@@ -4,7 +4,7 @@
  * @param {String} levelPath
  * @return {Array.<String>}
  */
-const searchJson = (json, searchTerm, levelPath) => {
+const searchJson = (json, searchTerm, levelPath = 'root') => {
   const paths = [];
 
   if (!searchTerm) {
@@ -31,6 +31,30 @@ const searchJson = (json, searchTerm, levelPath) => {
   return paths;
 };
 
+/**
+ * @param {Object} json
+ * @param {String} levelPath
+ * @return {Array.<String>}
+ */
+const jsonFlatPaths = (json, levelPath = 'root') => {
+  const paths = [];
+
+  for (const jsonElement in json) {
+    const path = `${levelPath}.${jsonElement}`;
+    if (typeof json[jsonElement] === 'object') {
+      const result = jsonFlatPaths(json[jsonElement], path);
+      if (result.length) {
+        paths.push(...result);
+      }
+    } else {
+      paths.push(path);
+    }
+  }
+
+  return paths;
+};
+
 module.exports = {
   searchJson,
+  jsonFlatPaths,
 };
