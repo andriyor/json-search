@@ -30,6 +30,15 @@ describe('searchJson', () => {
     expect(searchJson(json, '2', 'main')).toStrictEqual(['main.array.1', 'main.number']);
   });
 
+  test('isAlphabetically', () => {
+    expect(searchJson(json, 'Hello', 'main', true)).toStrictEqual([
+      'main.arr.0',
+      'main.obj.string',
+      'main.obj.obj2.string',
+      'main.string',
+    ]);
+  });
+
   test('search substring', () => {
     expect(searchJson(json, 'ell')).toStrictEqual([
       'root.string',

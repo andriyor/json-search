@@ -1,30 +1,42 @@
+const pushPath = (json, jsonElement, levelPath, searchTerm, paths) => {
+  const path = `${levelPath}.${jsonElement}`;
+  if (typeof json[jsonElement] === 'string' && json[jsonElement].toLowerCase().includes(searchTerm)) {
+    paths.push(path);
+  } else if (
+    (typeof json[jsonElement] === 'number' || typeof json[jsonElement] === 'boolean') &&
+    String(json[jsonElement]).includes(searchTerm)
+  ) {
+    paths.push(path);
+  } else if (typeof json[jsonElement] === 'object') {
+    const result = searchJson(json[jsonElement], searchTerm, path);
+    if (result.length) {
+      paths.push(...result);
+    }
+  }
+};
+
 /**
  * @param {Object} json
  * @param {String} searchTerm
  * @param {String} levelPath
+ * @param {Boolean} isAlphabetically
  * @return {Array.<String>}
  */
-const searchJson = (json, searchTerm, levelPath = 'root') => {
+const searchJson = (json, searchTerm, levelPath = 'root', isAlphabetically = false) => {
   const paths = [];
 
   if (!searchTerm) {
     return paths;
   }
 
-  for (const jsonElement in json) {
-    const path = `${levelPath}.${jsonElement}`;
-    if (typeof json[jsonElement] === 'string' && json[jsonElement].toLowerCase().includes(searchTerm)) {
-      paths.push(path);
-    } else if (
-      (typeof json[jsonElement] === 'number' || typeof json[jsonElement] === 'boolean') &&
-      String(json[jsonElement]).includes(searchTerm)
-    ) {
-      paths.push(path);
-    } else if (typeof json[jsonElement] === 'object') {
-      const result = searchJson(json[jsonElement], searchTerm, path);
-      if (result.length) {
-        paths.push(...result);
-      }
+  const normalized = searchTerm.toLowerCase();
+  if (isAlphabetically) {
+    for (const jsonElement of Object.keys(json).sort()) {
+      pushPath(json, jsonElement, levelPath, normalized, paths);
+    }
+  } else {
+    for (const jsonElement in json) {
+      pushPath(json, jsonElement, levelPath, normalized, paths);
     }
   }
 
