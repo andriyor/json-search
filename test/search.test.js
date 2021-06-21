@@ -5,6 +5,7 @@ const json = {
   boolean: false,
   color: 'gold',
   null: null,
+  undefined: undefined,
   number: 123,
   object: {
     a: 'b',
@@ -24,6 +25,13 @@ const json = {
 describe('searchJson', () => {
   test('search number', () => {
     expect(searchJson(json, '2')).toStrictEqual(['root.array.1', 'root.number']);
+  });
+  test('search null', () => {
+    expect(searchJson(json, 'nul')).toStrictEqual(['root.null']);
+  });
+
+  test('search undef', () => {
+    expect(searchJson(json, 'undef')).toStrictEqual(['root.undefined']);
   });
 
   test('root name', () => {
@@ -54,13 +62,15 @@ describe('searchJson', () => {
 });
 
 describe('jsonPaths', () => {
-  test('search number', () => {
+  test('flat paths', () => {
     expect(jsonFlatPaths(json)).toStrictEqual([
       'root.array.0',
       'root.array.1',
       'root.array.2',
       'root.boolean',
       'root.color',
+      'root.null',
+      'root.undefined',
       'root.number',
       'root.object.a',
       'root.object.c',

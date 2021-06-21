@@ -3,11 +3,14 @@ const pushPath = (json, jsonElement, levelPath, searchTerm, paths) => {
   if (typeof json[jsonElement] === 'string' && json[jsonElement].toLowerCase().includes(searchTerm)) {
     paths.push(path);
   } else if (
-    (typeof json[jsonElement] === 'number' || typeof json[jsonElement] === 'boolean') &&
+    (typeof json[jsonElement] === 'number' ||
+      typeof json[jsonElement] === 'boolean' ||
+      json[jsonElement] === null ||
+      json[jsonElement] === undefined) &&
     String(json[jsonElement]).includes(searchTerm)
   ) {
     paths.push(path);
-  } else if (typeof json[jsonElement] === 'object') {
+  } else if (typeof json[jsonElement] === 'object' && !(json[jsonElement] === null)) {
     const result = searchJson(json[jsonElement], searchTerm, path);
     if (result.length) {
       paths.push(...result);
@@ -53,7 +56,7 @@ const jsonFlatPaths = (json, levelPath = 'root') => {
 
   for (const jsonElement in json) {
     const path = `${levelPath}.${jsonElement}`;
-    if (typeof json[jsonElement] === 'object') {
+    if (typeof json[jsonElement] === 'object' && !(json[jsonElement] === null)) {
       const result = jsonFlatPaths(json[jsonElement], path);
       if (result.length) {
         paths.push(...result);
